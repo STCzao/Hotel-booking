@@ -5,21 +5,20 @@ import connectDB from "./configs/db.js";
 import { clerkMiddleware } from "@clerk/express";
 import clerkWebhooks from "./controllers/clerkWebhooks.js";
 
+connectDB();
+
 const app = express();
+app.use(cors()); // Enable Cross-Origin Resource Sharing
 
-connectDB(); // ⬅️ asegurate que se ejecuta
-
-app.use(cors());
-
-// ✅ RAW body SOLO para Clerk Webhook
-app.post("/api/clerk", express.raw({ type: "application/json" }), clerkWebhooks);
-
-// ✅ Middleware del resto de la app
+//Middleware
 app.use(express.json());
 app.use(clerkMiddleware());
 
-app.get("/", (req, res) => res.send("API is working fine"));
+// API to listen to Clerl Webhooks
+app.use("/api/clerk", clerkWebhooks)
+
+app.get("/", (req, res) => res.send("API is working"));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
