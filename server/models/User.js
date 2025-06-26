@@ -13,4 +13,8 @@ const userSchema = mongoose.Schema(
 );
 
 const User = mongoose.model("User", userSchema);
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of b6fe0c9 (Probando la conexion a MongoDB)
 export default User;
